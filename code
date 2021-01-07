@@ -1,0 +1,35 @@
+import cv2
+from random import randrange
+
+# Retrieves info of pre-trained data from face frontals from opencv (haar cascade algorithm)
+face_data = cv2.CascadeClassifier('haarcascade_frontalface_default.xml')
+
+# importing image into open cv
+# img = cv2.imread("elon.jpg")
+
+# using video capture
+webcam = cv2.VideoCapture(0)
+
+while True:
+    # Reading frames
+    frame_read, frame = webcam.read()
+
+    # converting to grayscale
+    grayscaled = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+
+    # Detect faces
+    face_coordinates = face_data.detectMultiScale(grayscaled)
+
+    # draw rectangles // bgr instead of rgb due to open cv
+    for (x, y, w, h) in face_coordinates:
+        cv2.rectangle(frame, (x,y), (x+w, y+h), (randrange(256), randrange(256), randrange(256)), 7)
+
+    # displaying the window
+    cv2.imshow('Face Recognition', frame)
+    key = cv2.waitKey(1)
+
+    # ASCII characters for "q" to quit the app
+    if key == 81 or key == 113:
+        break
+
+webcam.release()
